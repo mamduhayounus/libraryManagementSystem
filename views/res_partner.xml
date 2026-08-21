@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_inherit_library" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.library</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Hide Standard Smart Buttons ONLY for Members -->
+            <xpath expr="//button[@name='schedule_meeting']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_opportunity']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_sale_order']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(purchase.act_res_partner_2_purchase_order)d']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(purchase_stock.action_purchase_vendor_delay_report)d']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+
+            <!-- 2. Address Label -->
+            <xpath expr="//div[hasclass('o_address_format')]" position="before">
+                <label for="street" string="Address" class="fw-bold mb-1" invisible="is_company"/>
+            </xpath>
+
+            <!-- 3. Member Checkbox & Member Information -->
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="is_member"/>
+                <field name="ref" string="Member Card No / Ref" invisible="not is_member"/>
+                <field name="cnic" invisible="not is_member"/>
+                <field name="age" invisible="not is_member"/>
+            </xpath>
+
+            <!-- 4. Library Stat Buttons (Borrowed, Reserved, Returned) -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button"
+                        icon="fa-book"
+                        type="object"
+                        name="action_view_issued_books"
+                        invisible="not is_member">
+                    <field name="issued_books_count" widget="statinfo" string="Borrowed"/>
+                </button>
+                <button class="oe_stat_button"
+                        icon="fa-bookmark"
+                        type="object"
+                        name="action_view_reserved_books"
+                        invisible="not is_member">
+                    <field name="reserved_books_count" widget="statinfo" string="Reserved"/>
+                </button>
+                <button class="oe_stat_button"
+                        icon="fa-undo"
+                        type="object"
+                        name="action_view_returned_books"
+                        invisible="not is_member">
+                    <field name="returned_books_count" widget="statinfo" string="Returned"/>
+                </button>
+            </xpath>
+
+            <!-- 5. Hide Non-Essential Business Fields ONLY for Members -->
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//field[@name='function']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//field[@name='website']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+
+            <!-- 6. Hide Standard Tabs ONLY for Members -->
+            <xpath expr="//page[@name='contact_addresses']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//page[@name='accounting']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="attributes">
+                <attribute name="invisible">is_member</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

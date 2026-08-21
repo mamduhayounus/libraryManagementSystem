@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Window Actions -->
+    <record id="action_library_books" model="ir.actions.act_window">
+        <field name="name">Books / Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_book', '=', True)]</field>
+        <field name="context">{'default_is_book': True}</field>
+    </record>
+
+    <record id="action_library_members" model="ir.actions.act_window">
+        <field name="name">Members</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_member', '=', True)]</field>
+        <field name="context">{'default_is_member': True}</field>
+    </record>
+
+    <record id="action_library_issuance" model="ir.actions.act_window">
+        <field name="name">Inventory / Issuance</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <!-- Filter: Only show pickings that contain library books -->
+        <field name="domain">[('move_ids.product_id.is_book', '=', True)]</field>
+    </record>
+
+<!--    <record id="action_library_invoices" model="ir.actions.act_window">-->
+<!--        <field name="name">Invoices</field>-->
+<!--        <field name="res_model">account.move</field>-->
+<!--        <field name="view_mode">list,form</field>-->
+<!--        &lt;!&ndash; Filter: Only show invoices linked to a library picking OR marked as a penalty &ndash;&gt;-->
+<!--        <field name="domain">[-->
+<!--            ('move_type', '=', 'out_invoice'),-->
+<!--            '|',-->
+<!--            ('picking_id', '!=', False),-->
+<!--            ('is_penalty_invoice', '=', True)-->
+<!--            ]</field>-->
+<!--    </record>-->
+
+    <!-- Top Menu -->
+    <menuitem id="menu_library_root" name="Library Management" sequence="10"/>
+
+    <!-- Submenus -->
+    <menuitem id="menu_library_issuance" name="Inventory" parent="menu_library_root" action="action_library_issuance" sequence="10"/>
+<!--    <menuitem id="menu_library_invoices" name="Invoices" parent="menu_library_root" action="action_library_invoices" sequence="20"/>-->
+    <menuitem id="menu_library_members" name="Members" parent="menu_library_root" action="action_library_members" sequence="30"/>
+    <menuitem id="menu_library_books" name="Books" parent="menu_library_root" action="action_library_books" sequence="40"/>
+</odoo>

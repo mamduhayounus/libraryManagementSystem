@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_picking_form_inherit_library" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.library</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Direct Print Acknowledgment PDF Button -->
+            <xpath expr="//header" position="inside">
+                <button name="%(action_report_acknowledgment)d"
+                        string="Print Acknowledgment"
+                        type="action"
+                        class="btn-danger"
+                        invisible="state != 'done'"/>
+            </xpath>
+
+            <!-- Rename 'Mark as Todo' / 'Confirm' button to 'Reserve' -->
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="string">Reserve</attribute>
+            </xpath>
+
+            <!-- Display Dates and Invoices -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="issue_date" readonly="1"/>
+                <field name="due_date"/>
+                <field name="return_date" readonly="1"/>
+                <field name="invoice_id" readonly="1" invisible="not invoice_id"/>
+                <field name="penalty_invoice_id" readonly="1" invisible="not penalty_invoice_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

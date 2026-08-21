@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 1. Report Action -->
+    <record id="action_report_acknowledgment" model="ir.actions.report">
+        <field name="name">Borrowing Acknowledgment</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">library.report_acknowledgment</field>
+        <field name="report_file">library.report_acknowledgment</field>
+        <field name="print_report_name">'Borrowing_Acknowledgment_' + (object.name or '').replace('/', '_')</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- 2. QWeb PDF Template -->
+    <template id="report_acknowledgment">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page mt-3" style="font-family: Arial, sans-serif; font-size: 13px;">
+
+                        <!-- Header Banner -->
+                        <div class="text-center mb-4 p-2 bg-light border">
+                            <h2 class="fw-bold text-uppercase mb-0">Book Issuance &amp; Acknowledgment Form</h2>
+                            <small class="text-muted">Official Library Record &amp; Member Receipt</small>
+                        </div>
+
+                        <!-- Member & Issuance Metadata Grid -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div class="border p-3 h-100">
+                                    <h6 class="fw-bold text-decoration-underline mb-2">Member Information</h6>
+                                    <strong>Name:</strong> <span t-field="doc.partner_id.name"/><br/>
+                                    <strong>Member Card / Ref:</strong> <span t-field="doc.partner_id.ref"/><br/>
+                                    <strong>CNIC No:</strong> <span t-field="doc.partner_id.cnic"/><br/>
+                                    <strong>Phone:</strong> <span t-field="doc.partner_id.phone"/>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border p-3 h-100">
+                                    <h6 class="fw-bold text-decoration-underline mb-2">Issuance Details</h6>
+                                    <strong>Transfer Ref:</strong> <span t-field="doc.name"/><br/>
+                                    <strong>Issue Date:</strong> <span t-field="doc.issue_date"/><br/>
+                                    <strong>Due Date:</strong> <span t-field="doc.due_date"/><br/>
+                                    <strong>Status:</strong> <span t-field="doc.state"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Issued Books Line Items with Lot / Serial Numbers -->
+                        <h6 class="fw-bold mt-4 mb-2">Issued Books List</h6>
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 5%;">#</th>
+                                    <th>Book Title &amp; Variant</th>
+                                    <th class="text-center">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="i" t-value="1"/>
+                                <tr t-foreach="doc.move_ids" t-as="move">
+                                    <td><t t-esc="i"/></td>
+                                    <td><span t-field="move.product_id.display_name"/></td>
+                                    <td class="text-center"><span t-field="move.product_uom_qty"/></td>
+                                    <t t-set="i" t-value="i+1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Legal Declaration & Rules -->
+                        <div class="p-3 border rounded bg-light my-4" style="font-size: 11px; line-height: 1.5;">
+                            <strong class="text-uppercase">Member Declaration &amp; Liability Terms:</strong>
+                            <p class="mb-0 mt-1">
+                                I, <strong><span t-field="doc.partner_id.name"/></strong> (CNIC: <strong><span t-field="doc.partner_id.cnic"/></strong>), hereby acknowledge physically receiving the book(s) listed above in complete and undamaged condition. I promise to return all borrowed items to the library on or before <strong><span t-field="doc.due_date"/></strong>. I agree that failure to return the items on time will result in late return penalties charged at <strong>$200.00/day</strong>. In the event of loss or damage, I accept full financial responsibility for replacing the items.
+                            </p>
+                        </div>
+
+                        <!-- Physical Signature Area -->
+                        <div class="row mt-5 pt-4">
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1.5px solid #000; width: 85%; margin: 0 auto; padding-top: 6px;">
+                                    <strong>Member Signature</strong><br/>
+                                    <small t-field="doc.partner_id.name"/><br/>
+                                    <small>Date: ____ / ____ / ________</small>
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1.5px solid #000; width: 85%; margin: 0 auto; padding-top: 6px;">
+                                    <strong>Authorized Librarian Signature</strong><br/>
+                                    <small>Library Staff</small><br/>
+                                    <small>Date: ____ / ____ / ________</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

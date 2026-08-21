@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 1. Base Product Form Cleanup & Layout -->
+    <record id="product_template_form_view_inherit_library" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.library</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Hide Print Labels Header Button -->
+            <xpath expr="//button[@name='action_open_label_layout']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+            <!-- Hide Smart Buttons -->
+            <xpath expr="//button[@name='action_product_tmpl_forecast_report']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_open_documents']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_po']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_sales']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_orderpoints']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_related_putaway_rules']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_storage_category_capacity']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+            <!-- Library Checkbox (Native 'type' radio stays above this) -->
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="is_book"/>
+            </xpath>
+
+            <!-- Relabel Book Reference Number -->
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="string">Book Reference No.</attribute>
+                <attribute name="placeholder">e.g. Series 10021</attribute>
+            </xpath>
+
+
+            <!-- Hide Cost Price (standard_price) only -->
+            <xpath expr="//label[@for='list_price']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//label[@for='taxes_id']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//label[@for='standard_price']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//field[@name='standard_price']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+            <!-- Hide Standard Retail Fields -->
+            <xpath expr="//field[@name='categ_id']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//field[@name='barcode']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//div[@name='options']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+            <!-- Custom Library Fields Positioned Cleanly -->
+            <xpath expr="//field[@name='categ_id']" position="after">
+]                <field name="author" invisible="not is_book" placeholder="e.g. George Orwell"/>
+                <field name="publisher" invisible="not is_book" placeholder="e.g. Penguin Books"/>
+                <field name="product_tag_ids" widget="many2many_tags" string="Genres / Tags" invisible="not is_book" placeholder="e.g. Fictional, Science, Math..."/>
+            </xpath>
+
+            <!-- Hide Unnecessary Retail Tabs -->
+            <xpath expr="//page[@name='sales']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//page[@name='purchase']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//page[@name='inventory']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- 2. Stock Module Extension -->
+    <record id="product_template_form_view_inherit_stock_library" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.stock.library</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- 3. Sales Module Extension -->
+    <record id="product_template_form_view_inherit_sale_library" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.sale.library</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='invoice_policy']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='product_tooltip']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- 4. Account Module Extension -->
+    <record id="product_template_form_view_inherit_account_library" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.account.library</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="account.product_template_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='list_price']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//field[@name='taxes_id']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//field[@name='supplier_taxes_id']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tax_string']" position="attributes">
+                <attribute name="invisible">is_book</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
